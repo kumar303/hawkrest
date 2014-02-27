@@ -1,0 +1,11 @@
+# For testing.
+djangorestframework >= 2.3.12
+Django >= 1.6
+django-nose >= 1.2
+mock >= 1.0.1
+nose >= 1.3.0
+nosenicedots >= 0.5
+
+# For documentation.
+Sphinx >= 1.2.1
+sphinx-rtd-theme >= 0.1.5
