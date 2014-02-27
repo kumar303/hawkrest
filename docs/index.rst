@@ -63,7 +63,7 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
-- **0.0.1** (unreleased)
+- **0.0.1** (2014-02-27)
 
   - Initial release, extracted from https://github.com/mozilla/apk-signer
 
