@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Hawkrest documentation build configuration file, created by
+# HawkREST documentation build configuration file, created by
 # sphinx-quickstart on Thu Feb 27 11:05:46 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Hawkrest'
+project = u'HawkREST'
 copyright = u'2014, Kumar McMillan'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -204,7 +204,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'Hawkrest.tex', u'Hawkrest Documentation',
+  ('index', 'Hawkrest.tex', u'HawkREST Documentation',
    u'Kumar McMillan', 'manual'),
 ]
 
@@ -234,7 +234,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'hawkrest', u'Hawkrest Documentation',
+    ('index', 'hawkrest', u'HawkREST Documentation',
      [u'Kumar McMillan'], 1)
 ]
 
@@ -248,8 +248,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Hawkrest', u'Hawkrest Documentation',
-   u'Kumar McMillan', 'Hawkrest', 'One line description of project.',
+  ('index', 'HawkREST', u'HawkREST Documentation',
+   u'Kumar McMillan', 'HawkREST', 'One line description of project.',
    'Miscellaneous'),
 ]
 

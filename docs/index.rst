@@ -1,10 +1,10 @@
-.. Hawkrest documentation master file, created by
+.. HawkREST documentation master file, created by
    sphinx-quickstart on Thu Feb 27 11:05:46 2014.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 ========
-Hawkrest
+HawkREST
 ========
 
 `Hawk`_ HTTP Authorization for `Django Rest Framework`_.
@@ -14,7 +14,7 @@ messages signed by a shared key.
 It is based on `HTTP MAC access authentication`_ (which
 was based on parts of `OAuth 1.0`_).
 
-Hawkrest uses the `mohawk`_ module to add Hawk
+HawkREST uses the `mohawk`_ module to add Hawk
 authorization to your REST API views.
 
 This guide will help you set everything up but you should

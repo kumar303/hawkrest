@@ -1,5 +1,5 @@
 #
-# Hawkrest settings
+# HawkREST settings
 #
 
 # When True, it means Hawk authentication will be disabled everywhere.
