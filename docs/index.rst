@@ -72,7 +72,7 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
-- **0.0.2** (unreleased)
+- **0.0.2** (2014-03-03)
 
   - Added support for Python 3.3 and greater
   - Added support for Python 2.6
