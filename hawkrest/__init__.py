@@ -1,4 +1,5 @@
 import logging
+import sys
 import traceback
 
 from django.conf import settings
@@ -44,10 +45,11 @@ class HawkAuthentication(BaseAuthentication):
                             else None),
                 content_type=request.META.get('CONTENT_TYPE', ''),
                 timestamp_skew_in_seconds=settings.HAWK_MESSAGE_EXPIRATION)
-        except HawkFail, exc:
+        except HawkFail:
+            etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
             log.info('Hawk: denying access because of '
-                     '{exc.__class__.__name__}: {exc}'.format(exc=exc))
+                     '{etype}: {val}'.format(etype=etype, val=val))
             raise AuthenticationFailed('authentication failed')
 
         # Pass our receiver object to the middleware so the request header

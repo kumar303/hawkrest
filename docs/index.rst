@@ -9,6 +9,9 @@ HawkREST
 
 `Hawk`_ HTTP Authorization for `Django Rest Framework`_.
 
+.. image:: https://travis-ci.org/kumar303/hawkrest.png?branch=master
+    :target: https://travis-ci.org/kumar303/hawkrest
+
 Hawk lets two parties securely communicate with each other using
 messages signed by a shared key.
 It is based on `HTTP MAC access authentication`_ (which
@@ -24,8 +27,6 @@ with the security aspects of Hawk.
 
 .. _`Hawk`: https://github.com/hueniverse/hawk
 .. _`HTTP MAC access authentication`: http://tools.ietf.org/html/draft-hammer-oauth-v2-mac-token-05
-.. _`Django Rest Framework`: http://django-rest-framework.org/
-.. _`mohawk`: http://mohawk.readthedocs.org/
 .. _`OAuth 1.0`: http://tools.ietf.org/html/rfc5849
 .. _`mohawk security considerations`: http://mohawk.readthedocs.org/en/latest/security.html
 
@@ -33,6 +34,12 @@ with the security aspects of Hawk.
 
 Installation
 ============
+
+Requirements:
+
+* Python 2.6+ or 3.3+
+* `Django Rest Framework`_
+* `mohawk`_
 
 Using `pip`_, install the module like this::
 
@@ -43,6 +50,8 @@ You'll most likely put this in a `requirements`_ file within your Django app.
 
 The source code is available at https://github.com/kumar303/hawkrest
 
+.. _`Django Rest Framework`: http://django-rest-framework.org/
+.. _`mohawk`: http://mohawk.readthedocs.org/
 .. _`pip`: http://www.pip-installer.org/
 .. _`requirements`: http://www.pip-installer.org/en/latest/user_guide.html#requirements-files
 
@@ -63,10 +72,14 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
+- **0.0.2** (unreleased)
+
+  - Added support for Python 3.3 and greater
+  - Added support for Python 2.6
+
 - **0.0.1** (2014-02-27)
 
   - Initial release, extracted from https://github.com/mozilla/apk-signer
-
 
 Indices and tables
 ==================
