@@ -72,6 +72,11 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
+- **0.0.3** (2015-01-05)
+
+  - Fixed traceback when cache setting is undefined.
+    Thanks to wolfgangmeyers for the patch.
+
 - **0.0.2** (2014-03-03)
 
   - Added support for Python 3.3 and greater

@@ -41,7 +41,9 @@ class HawkAuthentication(BaseAuthentication):
                 request.build_absolute_uri(),
                 request.method,
                 content=request.body,
-                seen_nonce=(seen_nonce if settings.USE_CACHE_FOR_HAWK_NONCE
+                seen_nonce=(seen_nonce
+                            if getattr(settings, 'USE_CACHE_FOR_HAWK_NONCE',
+                                       True)
                             else None),
                 content_type=request.META.get('CONTENT_TYPE', ''),
                 timestamp_skew_in_seconds=settings.HAWK_MESSAGE_EXPIRATION)
