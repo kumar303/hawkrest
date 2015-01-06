@@ -34,7 +34,7 @@ class TestMiddleware(BaseTest):
                             sender.request_header,
                             url, method,
                             content=req.body,
-                            content_type=req.META['content_type'])
+                            content_type=req.META['CONTENT_TYPE'])
         req.META['hawk.receiver'] = receiver
 
     def accept_response(self, response, sender):

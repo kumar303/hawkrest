@@ -48,6 +48,8 @@ INSTALLED_APPS = (
     'hawkrest',
 )
 
+MIDDLEWARE_CLASSES = []
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_PLUGINS = [

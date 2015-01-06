@@ -21,6 +21,8 @@ class BaseTest(TestCase):
         return do_request(self.url,
                           HTTP_AUTHORIZATION=sender.request_header,
                           content_type=content_type,
+                          # Django 1.7 no longer sets the header automatically
+                          CONTENT_TYPE=content_type,
                           data=kw.pop('data', ''),
                           **kw)
 
