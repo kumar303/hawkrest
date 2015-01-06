@@ -12,6 +12,8 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 log = logging.getLogger(__name__)
+# Number of seconds until a Hawkmessage expires.
+default_message_expiration = 60
 
 
 class HawkAuthentication(BaseAuthentication):
@@ -46,7 +48,9 @@ class HawkAuthentication(BaseAuthentication):
                                        True)
                             else None),
                 content_type=request.META.get('CONTENT_TYPE', ''),
-                timestamp_skew_in_seconds=settings.HAWK_MESSAGE_EXPIRATION)
+                timestamp_skew_in_seconds=getattr(settings,
+                                                  'HAWK_MESSAGE_EXPIRATION',
+                                                  default_message_expiration))
         except HawkFail:
             etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
@@ -84,5 +88,6 @@ def seen_nonce(nonce, timestamp):
         cache.set(key, True,
                   # We only need the nonce until the message itself expires.
                   # This also adds a little bit of padding.
-                  timeout=settings.HAWK_MESSAGE_EXPIRATION + 5)
+                  timeout=getattr(settings, 'HAWK_MESSAGE_EXPIRATION',
+                                  default_message_expiration) + 5)
         return False
