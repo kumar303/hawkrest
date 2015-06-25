@@ -74,11 +74,11 @@ def lookup_credentials(cr_id):
     return settings.HAWK_CREDENTIALS[cr_id]
 
 
-def seen_nonce(nonce, timestamp):
+def seen_nonce(id, nonce, timestamp):
     """
     Returns True if the Hawk nonce has been seen already.
     """
-    key = '{n}:{ts}'.format(n=nonce, ts=timestamp)
+    key = '{id}:{n}:{ts}'.format(id=id, n=nonce, ts=timestamp)
     if cache.get(key):
         log.warning('replay attack? already processed nonce {k}'
                     .format(k=key))
