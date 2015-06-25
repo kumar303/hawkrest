@@ -72,6 +72,12 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
+- **0.0.4** (2015-06-24)
+
+  - Fixed nonce callback support for
+    `mohawk 0.3.0 <http://mohawk.readthedocs.org/en/latest/#changelog>`_.
+    Thanks to Josh Wilson for the patches.
+
 - **0.0.3** (2015-01-05)
 
   - Fixed traceback when cache setting is undefined.
