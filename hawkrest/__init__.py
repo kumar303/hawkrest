@@ -38,7 +38,7 @@ class HawkAuthentication(BaseAuthentication):
 
         try:
             receiver = Receiver(
-                lookup_credentials,
+                self.lookup_credentials,
                 request.META['HTTP_AUTHORIZATION'],
                 request.build_absolute_uri(),
                 request.method,
@@ -63,6 +63,8 @@ class HawkAuthentication(BaseAuthentication):
         request.META['hawk.receiver'] = receiver
         return on_success
 
+    def lookup_credentials(self, cr_id):
+        return lookup_credentials(cr_id)
 
 class DummyUser(object):
     pass
