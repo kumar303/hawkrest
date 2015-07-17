@@ -5,6 +5,13 @@ import traceback
 from django.conf import settings
 from django.core.cache import cache
 
+try:
+    from django.utils.module_loading import import_string
+except ImportError:
+    # compatibility with django < 1.7
+    from django.utils.module_loading import import_by_path
+    import_string = import_by_path
+
 from mohawk import Receiver
 from mohawk.exc import HawkFail
 from rest_framework.authentication import BaseAuthentication
@@ -32,13 +39,22 @@ class HawkAuthentication(BaseAuthentication):
             log.warn('Hawk authentication disabled via settings')
             return on_success
 
+        lookup_function = lookup_credentials
+        settings_lookup_name = getattr(
+            settings,
+            'HAWK_CREDENTIALS_LOOKUP',
+            None
+        )
+        if settings_lookup_name:
+            lookup_function = import_string(settings_lookup_name)
+
         if not request.META.get('HTTP_AUTHORIZATION'):
             log.debug('request did not send an Authorization header')
             raise AuthenticationFailed('missing authorization header')
 
         try:
             receiver = Receiver(
-                self.lookup_credentials,
+                lookup_function,
                 request.META['HTTP_AUTHORIZATION'],
                 request.build_absolute_uri(),
                 request.method,
@@ -63,8 +79,6 @@ class HawkAuthentication(BaseAuthentication):
         request.META['hawk.receiver'] = receiver
         return on_success
 
-    def lookup_credentials(self, cr_id):
-        return lookup_credentials(cr_id)
 
 class DummyUser(object):
     pass
