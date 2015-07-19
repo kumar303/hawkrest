@@ -108,7 +108,7 @@ class TestAuthentication(AuthTest):
     def test_alternative_credential_lookup(self):
         sender = self._sender(credentials=ALTERNATIVE_CREDS)
         req = self._request(sender)
-        lookup_path="tests.test_authentication.alternative_lookup"
+        lookup_path = "%s.alternative_lookup" % __name__
         with self.settings(HAWK_CREDENTIALS_LOOKUP=lookup_path):
             assert isinstance(self.auth.authenticate(req)[0], DummyUser), (
                 'Expected a successful authentication returning a dummy user')
