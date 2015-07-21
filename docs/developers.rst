@@ -39,8 +39,13 @@ Publish a release
 =================
 
 To publish a new release on `PyPI`_, make sure the changelog is up to date
-and make sure you bumped the module version in ``setup.py``. Run this
-from the repository root::
+and make sure you bumped the module version in ``setup.py``. Tag master
+at the version. For example, something like::
+
+    git tag 0.0.5
+    git push --tags
+
+Run this from the repository root to publish on `PyPI`_::
 
     python setup.py sdist register upload
 
