@@ -9,6 +9,17 @@ from hawkrest import DummyUser, HawkAuthentication
 from .base import BaseTest
 
 
+ALTERNATIVE_CREDS = {
+    'id' : 'alternative-id',
+    'key' : 'other key',
+    'algorithm' : 'sha256'
+}
+
+
+def alternative_lookup(cr_id):
+    return ALTERNATIVE_CREDS
+
+
 class AuthTest(BaseTest):
 
     def setUp(self):
@@ -93,6 +104,14 @@ class TestAuthentication(AuthTest):
             self.auth.authenticate(req)
 
         eq_(exc.exception.detail, 'authentication failed')
+
+    def test_alternative_credential_lookup(self):
+        sender = self._sender(credentials=ALTERNATIVE_CREDS)
+        req = self._request(sender)
+        lookup_path = "%s.alternative_lookup" % __name__
+        with self.settings(HAWK_CREDENTIALS_LOOKUP=lookup_path):
+            assert isinstance(self.auth.authenticate(req)[0], DummyUser), (
+                'Expected a successful authentication returning a dummy user')
 
 
 class TestNonce(AuthTest):

@@ -58,6 +58,29 @@ The credentials dict in your settings file would look like this:
 
 You can add each Hawk credential to this dict.
 
+If you need an alternative method for looking up credentials you can set up a
+lookup function under the ``HAWK_CREDENTIALS_LOOKUP`` setting. This function
+receives a Hawk ID as a parameter and returns a dict containing the
+credentials. For example, if you have a ``HawkUser`` model with a ``key``
+attribute then you can write a function ``hawk_lookup`` as follows:
+
+.. code-block:: python
+
+    def hawk_lookup(id):
+        user = HawkUser.objects.get(some_id=id)
+        return {
+            'id': id,
+            'key': user.key,
+            'algorithm': 'sha256'
+        }
+
+and then you would configure it in your settings:
+
+.. code-block:: python
+
+    HAWK_CREDENTIALS_LOOKUP = 'yourapi.auth.hawk_lookup'
+
+
 This setting is the number of seconds until a Hawk message
 expires:
 
