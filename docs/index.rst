@@ -72,6 +72,11 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
+- **0.0.5** (2015-07-21)
+
+  - Added `HAWK_CREDENTIALS_LOOKUP` setting which is a :ref:`callable <usage>`.
+    Thanks to `Felipe Otamendi <https://github.com/felipeota>`_ for the patch.
+
 - **0.0.4** (2015-06-24)
 
   - Fixed nonce callback support for

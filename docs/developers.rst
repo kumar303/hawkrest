@@ -30,8 +30,7 @@ Using a `virtualenv`_ you can set yourself up for development like this::
 Build the docs
 ==============
 
-Tox will leave documentation artifacts in ``.tox/docs/tmp/html/index.html``
-but you can also build them manually like this::
+In your development virtualenv, you can build the docs manually like this::
 
     make -C docs/ html doctest
     open docs/_build/html/index.html
@@ -39,8 +38,8 @@ but you can also build them manually like this::
 Publish a release
 =================
 
-To publish a new release on `PyPI`_, make sure the changelog is up to date,
-make sure you bumped the module version in ``setup.py``, and run this
+To publish a new release on `PyPI`_, make sure the changelog is up to date
+and make sure you bumped the module version in ``setup.py``. Run this
 from the repository root::
 
     python setup.py sdist register upload
