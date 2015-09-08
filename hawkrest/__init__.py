@@ -49,17 +49,25 @@ class HawkAuthentication(BaseAuthentication):
             lookup_function = import_string(settings_lookup_name)
 
         http_authorization = request.META.get('HTTP_AUTHORIZATION')
-        has_hawk_auth = (http_authorization
-                         and http_authorization.startswith('Hawk '))
-        hawk_is_mandatory = getattr(settings, 'HAWK_IS_MANDATORY', True)
+        if not http_authorization:
+            raise AuthenticationFailed('no authorization header in request')
+        else:
+            has_hawk_auth = http_authorization.startswith('Hawk ')
+            if not has_hawk_auth:
+                hawk_is_mandatory = getattr(settings, 'HAWK_IS_MANDATORY', True)
+                if not hawk_is_mandatory:
+                    # This allows the middleware chain to handle different types
+                    # of authorization.
+                    log.warning(
+                        'allowing non-Hawk authorization header: {}; '
+                        'make sure your middleware chain is validating this.'
+                        .format(http_authorization))
+                    return None
 
-        if not has_hawk_auth:
-
-            # A different authentication scheme was declared
-            if http_authorization and not hawk_is_mandatory:
-                return None
-            log.debug('request did not send an Authorization header')
-            raise AuthenticationFailed('missing authorization header')
+                raise AuthenticationFailed(
+                    'Hawk authorization header not found. Set '
+                    'HAWK_IS_MANDATORY=False to allow other authorization '
+                    'schemes.')
 
         try:
             receiver = Receiver(

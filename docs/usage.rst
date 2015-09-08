@@ -100,7 +100,7 @@ for some reason, set this:
 
     USE_CACHE_FOR_HAWK_NONCE = False  # only disable this if you need to
 
-If your api needs to support more than one authentication scheme, you can
+If your API needs to support more than one HTTP authorization scheme, you can
 add this to your settings file:
 
 .. code-block:: python
@@ -108,8 +108,15 @@ add this to your settings file:
     HAWK_IS_MANDATORY = False
 
 With this setting Hakwrest will not complain if it doesn't detect a proper
-hawk HTTP_AUTHORIZATION header and the other authentication schemes in use will
-be checked.
+Hawk ``HTTP_AUTHORIZATION`` header so that other authorization validators
+can be used.
+
+.. important::
+
+    If you set ``HAWK_IS_MANDATORY = False`` then any non-Hawk
+    ``HTTP_AUTHORIZATION`` header will be ignored.
+    Make sure your middleware chain validates all possible authorization
+    schemes.
 
 .. _`memcache`: https://docs.djangoproject.com/en/dev/topics/cache/#memcached
 .. _`prevent replay attacks`: http://mohawk.readthedocs.org/en/latest/usage.html#using-a-nonce-to-prevent-replay-attacks

@@ -32,29 +32,31 @@ class TestAuthentication(AuthTest):
 
     def test_missing_auth_header(self):
         req = self.factory.get('/')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'no authorization header in request',
+            lambda: self.auth.authenticate(req))
 
-        eq_(exc.exception.detail, 'missing authorization header')
-
-    def test_bad_auth_header(self):
-        req = self.factory.get('/', HTTP_AUTHORIZATION='not really')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
-
-        eq_(exc.exception.detail, 'missing authorization header')
+    def test_non_hawk_auth_header(self):
+        req = self.factory.get('/', HTTP_AUTHORIZATION='UnicornAuth: magic')
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'Hawk authorization header not found.*',
+            lambda: self.auth.authenticate(req))
 
     @override_settings(HAWK_IS_MANDATORY=False)
-    def test_missing_auth_header_not_mandatory(self):
+    def test_missing_auth_header_cannot_be_bypassed(self):
         req = self.factory.get('/')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
-
-        eq_(exc.exception.detail, 'missing authorization header')
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'no authorization header in request',
+            lambda: self.auth.authenticate(req))
 
     @override_settings(HAWK_IS_MANDATORY=False)
-    def test_bad_auth_header_not_mandatory(self):
-        req = self.factory.get('/', HTTP_AUTHORIZATION='not really')
+    def test_alternate_auth_header_can_be_allowed(self):
+        # If the request contains another authorization scheme then it will
+        # defer to your middleware chain.
+        req = self.factory.get('/', HTTP_AUTHORIZATION='UnicornAuth: magic')
         eq_(self.auth.authenticate(req), None)
 
     def test_hawk_get(self):
