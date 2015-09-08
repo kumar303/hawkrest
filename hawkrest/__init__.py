@@ -36,6 +36,8 @@ class HawkAuthentication(BaseAuthentication):
         request.META['hawk.receiver'] = None
 
         if getattr(settings, 'SKIP_HAWK_AUTH', False):
+            # This was added as a convenient way to run the apk-signer
+            # test suite but it's probably the wrong way to do it.
             log.warn('Hawk authentication disabled via settings')
             return on_success
 
@@ -50,24 +52,12 @@ class HawkAuthentication(BaseAuthentication):
 
         http_authorization = request.META.get('HTTP_AUTHORIZATION')
         if not http_authorization:
-            raise AuthenticationFailed('no authorization header in request')
-        else:
-            has_hawk_auth = http_authorization.startswith('Hawk ')
-            if not has_hawk_auth:
-                hawk_is_mandatory = getattr(settings, 'HAWK_IS_MANDATORY', True)
-                if not hawk_is_mandatory:
-                    # This allows the middleware chain to handle different types
-                    # of authorization.
-                    log.warning(
-                        'allowing non-Hawk authorization header: {}; '
-                        'make sure your middleware chain is validating this.'
-                        .format(http_authorization))
-                    return None
-
-                raise AuthenticationFailed(
-                    'Hawk authorization header not found. Set '
-                    'HAWK_IS_MANDATORY=False to allow other authorization '
-                    'schemes.')
+            log.debug('no authorization header in request')
+            return None
+        elif not http_authorization.startswith('Hawk '):
+            log.debug('ignoring non-Hawk authorization header: {} '
+                      .format(http_authorization))
+            return None
 
         try:
             receiver = Receiver(
@@ -87,9 +77,10 @@ class HawkAuthentication(BaseAuthentication):
         except HawkFail:
             etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
-            log.info('Hawk: denying access because of '
-                     '{etype}: {val}'.format(etype=etype, val=val))
-            raise AuthenticationFailed('authentication failed')
+            raise AuthenticationFailed(
+                'access denied: {etype.__name__}: {val}'
+                .format(etype=etype, val=val)
+            )
 
         # Pass our receiver object to the middleware so the request header
         # doesn't need to be parsed again.

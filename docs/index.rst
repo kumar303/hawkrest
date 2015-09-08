@@ -74,6 +74,9 @@ Changelog
 
 - **0.0.6** (unreleased)
 
+  - Fixed bug where other HTTP authorization schemes could not be supported at
+    the same time as Hawk. Thanks to
+    `Mauro Doglio <https://github.com/maurodoglio>`_ for the patch.
   - Fixed incorrect statement in docs that Python 2.6 was supported. Only 2.7 or
     greater is supported at this time.
 
