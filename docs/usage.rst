@@ -106,20 +106,31 @@ for some reason, set this:
 Protecting API views with Hawk
 ==============================
 
-If you had set ``DEFAULT_AUTHENTICATION_CLASSES`` to
-``hawkrest.HawkAuthentication`` in settings then all views will be protected
-by Hawk.
-
-To protect a specific view, add it directly like this:
+To protect all API views with Hawk by default, put this in your settings:
 
 .. code-block:: python
 
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'hawkrest.HawkAuthentication',
+        ),
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
+    }
+
+To protect a specific view directly, define it like this:
+
+.. code-block:: python
+
+    from rest_framework.permissions import IsAuthenticated
     from rest_framework.views import APIView
 
     from hawkrest import HawkAuthentication
 
     class ExampleView(APIView):
         authentication_classes = (HawkAuthentication,)
+        permission_classes = (IsAuthenticated,)
 
 Verification tool
 =================
