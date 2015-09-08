@@ -87,6 +87,9 @@ class HawkAuthentication(BaseAuthentication):
         request.META['hawk.receiver'] = receiver
         return on_success
 
+    def authenticate_header(self, request):
+        return 'Hawk'
+
 
 class DummyUser(object):
     pass

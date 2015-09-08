@@ -30,6 +30,10 @@ class AuthTest(BaseTest):
 
 class TestAuthentication(AuthTest):
 
+    def test_www_authenticate_header(self):
+        req = self.factory.get('/')
+        eq_(self.auth.authenticate_header(req), 'Hawk')
+
     def test_no_auth_for_missing_header(self):
         req = self.factory.get('/')
         eq_(self.auth.authenticate(req), None)

@@ -79,6 +79,7 @@ Changelog
     `Mauro Doglio <https://github.com/maurodoglio>`_ for the patch.
   - Fixed incorrect statement in docs that Python 2.6 was supported. Only 2.7 or
     greater is supported at this time.
+  - Sends ``WWW-Authenticate: Hawk`` header in 401 responses now.
 
 - **0.0.5** (2015-07-21)
 
