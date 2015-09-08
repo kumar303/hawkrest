@@ -37,7 +37,7 @@ Installation
 
 Requirements:
 
-* Python 2.6+ or 3.3+
+* Python 2.7+ or 3.3+
 * `Django Rest Framework`_
 * `mohawk`_
 
@@ -71,6 +71,11 @@ You can report issues at https://github.com/kumar303/hawkrest
 
 Changelog
 =========
+
+- **0.0.6** (unreleased)
+
+  - Fixed incorrect statement in docs that Python 2.6 was supported. Only 2.7 or
+    greater is supported at this time.
 
 - **0.0.5** (2015-07-21)
 
