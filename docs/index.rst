@@ -72,7 +72,7 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
-- **0.0.6** (unreleased)
+- **0.0.6** (2015-09-08)
 
   - Fixed bug where other HTTP authorization schemes could not be supported at
     the same time as Hawk. Thanks to
