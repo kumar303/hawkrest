@@ -100,37 +100,37 @@ for some reason, set this:
 
     USE_CACHE_FOR_HAWK_NONCE = False  # only disable this if you need to
 
-If your api needs to support more than one authentication scheme, you can
-add this to your settings file:
-
-.. code-block:: python
-
-    HAWK_IS_MANDATORY = False
-
-With this setting Hakwrest will not complain if it doesn't detect a proper
-hawk HTTP_AUTHORIZATION header and the other authentication schemes in use will
-be checked.
-
 .. _`memcache`: https://docs.djangoproject.com/en/dev/topics/cache/#memcached
 .. _`prevent replay attacks`: http://mohawk.readthedocs.org/en/latest/usage.html#using-a-nonce-to-prevent-replay-attacks
 
 Protecting API views with Hawk
 ==============================
 
-If you had set ``DEFAULT_AUTHENTICATION_CLASSES`` to
-``hawkrest.HawkAuthentication`` in settings then all views will be protected
-by Hawk.
-
-To protect a specific view, add it directly like this:
+To protect all API views with Hawk by default, put this in your settings:
 
 .. code-block:: python
 
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'hawkrest.HawkAuthentication',
+        ),
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
+    }
+
+To protect a specific view directly, define it like this:
+
+.. code-block:: python
+
+    from rest_framework.permissions import IsAuthenticated
     from rest_framework.views import APIView
 
     from hawkrest import HawkAuthentication
 
     class ExampleView(APIView):
         authentication_classes = (HawkAuthentication,)
+        permission_classes = (IsAuthenticated,)
 
 Verification tool
 =================

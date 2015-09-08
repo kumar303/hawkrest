@@ -30,31 +30,18 @@ class AuthTest(BaseTest):
 
 class TestAuthentication(AuthTest):
 
-    def test_missing_auth_header(self):
+    def test_www_authenticate_header(self):
         req = self.factory.get('/')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
+        eq_(self.auth.authenticate_header(req), 'Hawk')
 
-        eq_(exc.exception.detail, 'missing authorization header')
-
-    def test_bad_auth_header(self):
-        req = self.factory.get('/', HTTP_AUTHORIZATION='not really')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
-
-        eq_(exc.exception.detail, 'missing authorization header')
-
-    @override_settings(HAWK_IS_MANDATORY=False)
-    def test_missing_auth_header_not_mandatory(self):
+    def test_no_auth_for_missing_header(self):
         req = self.factory.get('/')
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
+        eq_(self.auth.authenticate(req), None)
 
-        eq_(exc.exception.detail, 'missing authorization header')
-
-    @override_settings(HAWK_IS_MANDATORY=False)
-    def test_bad_auth_header_not_mandatory(self):
-        req = self.factory.get('/', HTTP_AUTHORIZATION='not really')
+    def test_no_auth_for_alternate_auth_scheme(self):
+        # If the request contains another authorization scheme then it will
+        # defer to your chain of validators.
+        req = self.factory.get('/', HTTP_AUTHORIZATION='UnicornAuth: magic')
         eq_(self.auth.authenticate(req), None)
 
     def test_hawk_get(self):
@@ -94,10 +81,10 @@ class TestAuthentication(AuthTest):
                             data=post_data,
                             method=method)
 
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
-
-        eq_(exc.exception.detail, 'authentication failed')
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'access denied: MacMismatch: .*',
+            lambda: self.auth.authenticate(req))
 
     def test_hawk_get_wrong_sig(self):
         sender = self._sender(url='http://realsite.com')
@@ -114,10 +101,10 @@ class TestAuthentication(AuthTest):
         sender = self._sender(credentials=wrong_creds)
         req = self._request(sender)
 
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth.authenticate(req)
-
-        eq_(exc.exception.detail, 'authentication failed')
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'access denied: CredentialsLookupError: .*',
+            lambda: self.auth.authenticate(req))
 
     def test_alternative_credential_lookup(self):
         sender = self._sender(credentials=ALTERNATIVE_CREDS)
@@ -153,10 +140,10 @@ class TestNonce(AuthTest):
 
     def test_nonce_exists(self):
         self.cache.get.return_value = True
-        with self.assertRaises(AuthenticationFailed) as exc:
-            self.auth_request()
-
-        eq_(exc.exception.detail, 'authentication failed')
+        self.assertRaisesRegexp(
+            AuthenticationFailed,
+            'access denied: AlreadyProcessed: Nonce.*',
+            self.auth_request)
 
     def test_disabled(self):
         with self.settings(USE_CACHE_FOR_HAWK_NONCE=False):

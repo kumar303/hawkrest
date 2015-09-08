@@ -36,6 +36,8 @@ class HawkAuthentication(BaseAuthentication):
         request.META['hawk.receiver'] = None
 
         if getattr(settings, 'SKIP_HAWK_AUTH', False):
+            # This was added as a convenient way to run the apk-signer
+            # test suite but it's probably the wrong way to do it.
             log.warn('Hawk authentication disabled via settings')
             return on_success
 
@@ -49,17 +51,13 @@ class HawkAuthentication(BaseAuthentication):
             lookup_function = import_string(settings_lookup_name)
 
         http_authorization = request.META.get('HTTP_AUTHORIZATION')
-        has_hawk_auth = (http_authorization
-                         and http_authorization.startswith('Hawk '))
-        hawk_is_mandatory = getattr(settings, 'HAWK_IS_MANDATORY', True)
-
-        if not has_hawk_auth:
-
-            # A different authentication scheme was declared
-            if http_authorization and not hawk_is_mandatory:
-                return None
-            log.debug('request did not send an Authorization header')
-            raise AuthenticationFailed('missing authorization header')
+        if not http_authorization:
+            log.debug('no authorization header in request')
+            return None
+        elif not http_authorization.startswith('Hawk '):
+            log.debug('ignoring non-Hawk authorization header: {} '
+                      .format(http_authorization))
+            return None
 
         try:
             receiver = Receiver(
@@ -79,14 +77,18 @@ class HawkAuthentication(BaseAuthentication):
         except HawkFail:
             etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
-            log.info('Hawk: denying access because of '
-                     '{etype}: {val}'.format(etype=etype, val=val))
-            raise AuthenticationFailed('authentication failed')
+            raise AuthenticationFailed(
+                'access denied: {etype.__name__}: {val}'
+                .format(etype=etype, val=val)
+            )
 
         # Pass our receiver object to the middleware so the request header
         # doesn't need to be parsed again.
         request.META['hawk.receiver'] = receiver
         return on_success
+
+    def authenticate_header(self, request):
+        return 'Hawk'
 
 
 class DummyUser(object):

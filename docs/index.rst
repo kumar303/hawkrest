@@ -37,7 +37,7 @@ Installation
 
 Requirements:
 
-* Python 2.6+ or 3.3+
+* Python 2.7+ or 3.3+
 * `Django Rest Framework`_
 * `mohawk`_
 
@@ -71,6 +71,15 @@ You can report issues at https://github.com/kumar303/hawkrest
 
 Changelog
 =========
+
+- **0.0.6** (unreleased)
+
+  - Fixed bug where other HTTP authorization schemes could not be supported at
+    the same time as Hawk. Thanks to
+    `Mauro Doglio <https://github.com/maurodoglio>`_ for the patch.
+  - Fixed incorrect statement in docs that Python 2.6 was supported. Only 2.7 or
+    greater is supported at this time.
+  - Sends ``WWW-Authenticate: Hawk`` header in 401 responses now.
 
 - **0.0.5** (2015-07-21)
 
