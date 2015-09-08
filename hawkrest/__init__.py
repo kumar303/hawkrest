@@ -48,14 +48,23 @@ class HawkAuthentication(BaseAuthentication):
         if settings_lookup_name:
             lookup_function = import_string(settings_lookup_name)
 
-        if not request.META.get('HTTP_AUTHORIZATION'):
+        http_authorization = request.META.get('HTTP_AUTHORIZATION')
+        has_hawk_auth = (http_authorization
+                         and http_authorization.startswith('Hawk '))
+        hawk_is_mandatory = getattr(settings, 'HAWK_IS_MANDATORY', True)
+
+        if not has_hawk_auth:
+
+            # A different authentication scheme was declared
+            if http_authorization and not hawk_is_mandatory:
+                return None
             log.debug('request did not send an Authorization header')
             raise AuthenticationFailed('missing authorization header')
 
         try:
             receiver = Receiver(
                 lookup_function,
-                request.META['HTTP_AUTHORIZATION'],
+                http_authorization,
                 request.build_absolute_uri(),
                 request.method,
                 content=request.body,
