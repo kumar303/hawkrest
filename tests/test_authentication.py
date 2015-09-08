@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.test.utils import override_settings
 
 import mock
 from nose.tools import eq_
@@ -41,7 +42,20 @@ class TestAuthentication(AuthTest):
         with self.assertRaises(AuthenticationFailed) as exc:
             self.auth.authenticate(req)
 
-        eq_(exc.exception.detail, 'authentication failed')
+        eq_(exc.exception.detail, 'missing authorization header')
+
+    @override_settings(HAWK_IS_MANDATORY=False)
+    def test_missing_auth_header_not_mandatory(self):
+        req = self.factory.get('/')
+        with self.assertRaises(AuthenticationFailed) as exc:
+            self.auth.authenticate(req)
+
+        eq_(exc.exception.detail, 'missing authorization header')
+
+    @override_settings(HAWK_IS_MANDATORY=False)
+    def test_bad_auth_header_not_mandatory(self):
+        req = self.factory.get('/', HTTP_AUTHORIZATION='not really')
+        eq_(self.auth.authenticate(req), None)
 
     def test_hawk_get(self):
         sender = self._sender()
