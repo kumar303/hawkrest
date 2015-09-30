@@ -77,7 +77,7 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
-- **0.0.7** (Unreleased)
+- **0.0.7** (2015-09-30)
 
   - Fixes `issue #9 <https://github.com/kumar303/hawkrest/issues/9>`_
     where using ``rest_framework.permissions.IsAuthenticated``
