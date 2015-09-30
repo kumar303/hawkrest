@@ -1,11 +1,14 @@
+import unittest
+
 from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser
 from django.test.utils import override_settings
 
 import mock
 from nose.tools import eq_
 from rest_framework.exceptions import AuthenticationFailed
 
-from hawkrest import DummyUser, HawkAuthentication
+from hawkrest import HawkAuthenticatedUser, HawkAuthentication
 
 from .base import BaseTest
 
@@ -47,8 +50,9 @@ class TestAuthentication(AuthTest):
     def test_hawk_get(self):
         sender = self._sender()
         req = self._request(sender)
-        assert isinstance(self.auth.authenticate(req)[0], DummyUser), (
-            'Expected a successful authentication returning a dummy user')
+        assert isinstance(self.auth.authenticate(req)[0],
+                          HawkAuthenticatedUser), (
+            'Expected a successful authentication returning a user')
 
     def test_hawk_post(self):
         post_data = 'one=1&two=2&three=3'
@@ -62,8 +66,9 @@ class TestAuthentication(AuthTest):
                             data=post_data,
                             method=method)
 
-        assert isinstance(self.auth.authenticate(req)[0], DummyUser), (
-            'Expected a successful authentication returning a dummy user')
+        assert isinstance(self.auth.authenticate(req)[0],
+                          HawkAuthenticatedUser), (
+            'Expected a successful authentication returning a user')
 
     def test_hawk_post_wrong_sig(self):
         post_data = 'one=1&two=2&three=3'
@@ -111,8 +116,9 @@ class TestAuthentication(AuthTest):
         req = self._request(sender)
         lookup_path = "%s.alternative_lookup" % __name__
         with self.settings(HAWK_CREDENTIALS_LOOKUP=lookup_path):
-            assert isinstance(self.auth.authenticate(req)[0], DummyUser), (
-                'Expected a successful authentication returning a dummy user')
+            assert isinstance(self.auth.authenticate(req)[0],
+                              HawkAuthenticatedUser), (
+                'Expected a successful authentication returning a user')
 
 
 class TestNonce(AuthTest):
@@ -149,3 +155,34 @@ class TestNonce(AuthTest):
         with self.settings(USE_CACHE_FOR_HAWK_NONCE=False):
             self.auth_request()
         assert not self.cache.get.called, 'nonce check should be disabled'
+
+
+class TestHawkAuthenticatedUser(unittest.TestCase):
+
+    def setUp(self):
+        self.user = HawkAuthenticatedUser()
+
+    def test_method_compliance(self):
+        for name, attr in AbstractBaseUser.__dict__.items():
+            # Skip private and capitalized callables (like __init__ or Meta)
+            # Skip non-callable attributes.
+            if (    name.startswith('_') or
+                    name[0] == name[0].upper() or
+                    not callable(attr)):
+                continue
+            if not getattr(self.user, name, None):
+                raise AssertionError(
+                    'HawkAuthenticatedUser is missing method: {}'
+                    .format(name))
+
+    def test_is_anonymous(self):
+        eq_(self.user.is_anonymous(), False)
+
+    def test_is_authenticated(self):
+        eq_(self.user.is_authenticated(), True)
+
+    def test_is_active(self):
+        eq_(self.user.is_active, True)
+
+    def test_has_usable_password(self):
+        eq_(self.user.has_usable_password(), False)

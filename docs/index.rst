@@ -72,6 +72,17 @@ You can report issues at https://github.com/kumar303/hawkrest
 Changelog
 =========
 
+.. important::
+    If you're upgrading from a version prior to 0.0.6, be sure to
+    use ``rest_framework.permissions.IsAuthenticated`` on your views
+    :ref:`as documented <protecting-api-views>`
+
+- **0.0.7** (Unreleased)
+
+  - Fixes `issue #9 <https://github.com/kumar303/hawkrest/issues/9>`_
+    where using ``rest_framework.permissions.IsAuthenticated``
+    on your Hawk protected view caused an unexpected traceback.
+
 - **0.0.6** (2015-09-08)
 
   - **IMPORTANT**: If migrating to this version from an earlier version of

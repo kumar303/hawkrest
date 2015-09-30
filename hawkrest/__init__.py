@@ -26,7 +26,7 @@ default_message_expiration = 60
 class HawkAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-        on_success = (DummyUser(), None)
+        on_success = (HawkAuthenticatedUser(), None)
 
         # In case there is an exception, tell others that the view passed
         # through Hawk authorization. The META dict is used because
@@ -91,8 +91,48 @@ class HawkAuthentication(BaseAuthentication):
         return 'Hawk'
 
 
-class DummyUser(object):
-    pass
+class HawkAuthenticatedUser(object):
+    """
+    A real-ish user like AbstractBaseUser but not a real Django model.
+
+    This passes the DRF is_authenticated permission check but it may cause
+    other problems. If you need to work with a real Django model user
+    you might need to subclass HawkAuthentication.
+    """
+    is_active = True
+
+    def get_full_name(self):
+        return str(self.__class__.__name__)
+
+    def get_short_name(self):
+        return str(self.__class__.__name__)
+
+    def get_username(self):
+        return str(self.__class__.__name__)
+
+    def natural_key(self):
+        return str(self.__class__.__name__)
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
+    def set_password(self, password):
+        raise NotImplementedError()
+
+    def check_password(self, password):
+        raise NotImplementedError()
+
+    def set_unusable_password(self):
+        pass
+
+    def has_usable_password(self):
+        return False
+
+    def get_session_auth_hash(self):
+        raise NotImplementedError()
 
 
 def lookup_credentials(cr_id):
