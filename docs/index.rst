@@ -74,6 +74,12 @@ Changelog
 
 - **0.0.6** (2015-09-08)
 
+  - **IMPORTANT**: If migrating to this version from an earlier version of
+    ``hawkrest``, your Django Rest Framework API views *must* require an
+    authenticated user :ref:`as documented <protecting-api-views>`. In other
+    words, older versions of ``hawkrest`` would reject any request that didn't
+    have a Hawk authentication header but this version does not (see the bug fix
+    below).
   - Fixed bug where other HTTP authorization schemes could not be supported at
     the same time as Hawk. Thanks to
     `Mauro Doglio <https://github.com/maurodoglio>`_ for the patch.

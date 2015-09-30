@@ -103,6 +103,9 @@ for some reason, set this:
 .. _`memcache`: https://docs.djangoproject.com/en/dev/topics/cache/#memcached
 .. _`prevent replay attacks`: http://mohawk.readthedocs.org/en/latest/usage.html#using-a-nonce-to-prevent-replay-attacks
 
+
+.. _protecting-api-views:
+
 Protecting API views with Hawk
 ==============================
 
