@@ -77,10 +77,12 @@ class HawkAuthentication(BaseAuthentication):
         except HawkFail:
             etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
-            raise AuthenticationFailed(
-                'access denied: {etype.__name__}: {val}'
-                .format(etype=etype, val=val)
-            )
+            log.warning('access denied: {etype.__name__}: {val}'
+                        .format(etype=etype, val=val))
+
+            # This exception message is sent to the client as
+            # part of the 401 response:
+            raise AuthenticationFailed('Hawk authentication failed')
 
         # Pass our receiver object to the middleware so the request header
         # doesn't need to be parsed again.
