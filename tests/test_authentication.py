@@ -1,3 +1,4 @@
+import re
 import unittest
 
 from django.conf import settings
@@ -29,6 +30,15 @@ class AuthTest(BaseTest):
     def setUp(self):
         super(AuthTest, self).setUp()
         self.auth = HawkAuthentication()
+
+        p = mock.patch('hawkrest.log')
+        self.mock_log = p.start()
+        self.addCleanup(p.stop)
+
+    def assert_log_regex(self, method, pattern):
+        log_call = getattr(self.mock_log, method).call_args[0][0]
+        assert re.search(pattern, log_call), (
+            'Unexpected call: log.{}("{}")'.format(method, log_call))
 
 
 class TestAuthentication(AuthTest):
@@ -86,10 +96,10 @@ class TestAuthentication(AuthTest):
                             data=post_data,
                             method=method)
 
-        self.assertRaisesRegexp(
-            AuthenticationFailed,
-            'access denied: MacMismatch: .*',
-            lambda: self.auth.authenticate(req))
+        self.assertRaisesRegexp(AuthenticationFailed,
+                                'Hawk authentication failed',
+                                lambda: self.auth.authenticate(req))
+        self.assert_log_regex('warning', '^access denied: MacMismatch: ')
 
     def test_hawk_get_wrong_sig(self):
         sender = self._sender(url='http://realsite.com')
@@ -106,10 +116,11 @@ class TestAuthentication(AuthTest):
         sender = self._sender(credentials=wrong_creds)
         req = self._request(sender)
 
-        self.assertRaisesRegexp(
-            AuthenticationFailed,
-            'access denied: CredentialsLookupError: .*',
-            lambda: self.auth.authenticate(req))
+        self.assertRaisesRegexp(AuthenticationFailed,
+                                'Hawk authentication failed',
+                                lambda: self.auth.authenticate(req))
+        self.assert_log_regex('warning',
+                              '^access denied: CredentialsLookupError: ')
 
     def test_alternative_credential_lookup(self):
         sender = self._sender(credentials=ALTERNATIVE_CREDS)
@@ -125,6 +136,7 @@ class TestNonce(AuthTest):
 
     def setUp(self):
         super(TestNonce, self).setUp()
+
         p = mock.patch('hawkrest.cache')
         self.cache = p.start()
         self.addCleanup(p.stop)
@@ -146,10 +158,11 @@ class TestNonce(AuthTest):
 
     def test_nonce_exists(self):
         self.cache.get.return_value = True
-        self.assertRaisesRegexp(
-            AuthenticationFailed,
-            'access denied: AlreadyProcessed: Nonce.*',
-            self.auth_request)
+        self.assertRaisesRegexp(AuthenticationFailed,
+                                'Hawk authentication failed',
+                                self.auth_request)
+        self.assert_log_regex('warning',
+                              '^access denied: AlreadyProcessed: Nonce')
 
     def test_disabled(self):
         with self.settings(USE_CACHE_FOR_HAWK_NONCE=False):

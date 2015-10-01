@@ -77,6 +77,12 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
+- **0.0.8** (Unreleased)
+
+  - Fixes `issue #11 <https://github.com/kumar303/hawkrest/issues/11>`_
+    where exception info was leaked to the response, potentially revealing
+    sensitive information.
+
 - **0.0.7** (2015-09-30)
 
   - Fixes `issue #9 <https://github.com/kumar303/hawkrest/issues/9>`_
