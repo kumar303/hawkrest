@@ -136,6 +136,16 @@ class HawkAuthenticatedUser(object):
     def get_session_auth_hash(self):
         raise NotImplementedError()
 
+    # -----------------------------------------------
+    # These methods are in older Django vesions only:
+    # -----------------------------------------------
+
+    def get_previous_by_last_login(self, *args, **kw):
+        raise NotImplementedError()
+
+    def get_next_by_last_login(self, *args, **kw):
+        raise NotImplementedError()
+
 
 def lookup_credentials(cr_id):
     if cr_id not in settings.HAWK_CREDENTIALS:

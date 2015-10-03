@@ -13,7 +13,7 @@ You can run the full test suite with the `tox`_ command::
 
 To just run Python 2.7 unit tests type::
 
-    tox -e py27
+    tox -e py27-django1.8-drf3.2
 
 To just run doctests type::
 
@@ -27,10 +27,13 @@ Using a `virtualenv`_ you can set yourself up for development like this::
     pip install -r requirements/dev.txt
     python setup.py develop
 
+Note that this won't install any libraries that are tested at different
+versions. You need tox for that.
+
 Build the docs
 ==============
 
-In your development virtualenv, you can build the docs manually like this::
+In your development virtualenv, you can build the docs like this::
 
     make -C docs/ html doctest
     open docs/_build/html/index.html

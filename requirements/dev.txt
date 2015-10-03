@@ -1,6 +1,6 @@
-# For testing.
-djangorestframework >= 2.3.12
-Django >= 1.6
+# This is a rough set of what's needed for testing but it excludes specific
+# libraries that are tested at multiple versions.
+# See tox.ini for those versions.
 django-nose >= 1.2
 mock >= 1.0.1
 nose >= 1.3.0
