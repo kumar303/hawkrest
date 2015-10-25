@@ -27,7 +27,7 @@ class BaseTest(TestCase):
                           **kw)
 
     def _sender(self, method='GET', content_type='', url=None,
-                credentials=None, content=''):
+                credentials=None, content='', **kw):
         if not url:
             url = self.url
         if not credentials:
@@ -35,4 +35,5 @@ class BaseTest(TestCase):
         return Sender(credentials,
                       url, method,
                       content=content,
-                      content_type=content_type)
+                      content_type=content_type,
+                      **kw)

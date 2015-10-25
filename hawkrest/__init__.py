@@ -13,7 +13,7 @@ except ImportError:
     import_string = import_by_path
 
 from mohawk import Receiver
-from mohawk.exc import HawkFail
+from mohawk.exc import BadHeaderValue, HawkFail, TokenExpired
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -74,15 +74,20 @@ class HawkAuthentication(BaseAuthentication):
                 timestamp_skew_in_seconds=getattr(settings,
                                                   'HAWK_MESSAGE_EXPIRATION',
                                                   default_message_expiration))
-        except HawkFail:
+        except HawkFail as e:
             etype, val, tb = sys.exc_info()
             log.debug(traceback.format_exc())
             log.warning('access denied: {etype.__name__}: {val}'
                         .format(etype=etype, val=val))
-
-            # This exception message is sent to the client as
-            # part of the 401 response:
-            raise AuthenticationFailed('Hawk authentication failed')
+            # The exception message is sent to the client as part of the
+            # 401 response, so we're intentionally vague about the original
+            # exception type/value, to avoid assisting attackers.
+            msg = 'Hawk authentication failed'
+            if isinstance(e, BadHeaderValue):
+                msg += ': The request header was malformed'
+            elif isinstance(e, TokenExpired):
+                msg += ': The token has expired. Is your system clock correct?'
+            raise AuthenticationFailed(msg)
 
         # Pass our receiver object to the middleware so the request header
         # doesn't need to be parsed again.
