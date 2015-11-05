@@ -97,7 +97,7 @@ class TestAuthentication(AuthTest):
                             method=method)
 
         self.assertRaisesRegexp(AuthenticationFailed,
-                                'Hawk authentication failed',
+                                '^Hawk authentication failed$',
                                 lambda: self.auth.authenticate(req))
         self.assert_log_regex('warning', '^access denied: MacMismatch: ')
 
@@ -108,6 +108,16 @@ class TestAuthentication(AuthTest):
         with self.assertRaises(AuthenticationFailed):
             self.auth.authenticate(req)
 
+    def test_bad_header(self):
+        sender = self._sender()
+        sender.request_header += ', ext="invalid header \t"'
+        req = self._request(sender)
+
+        self.assertRaisesRegexp(AuthenticationFailed,
+                                '^Hawk authentication failed: The request header was ',
+                                lambda: self.auth.authenticate(req))
+        self.assert_log_regex('warning', '^access denied: BadHeaderValue: ')
+
     def test_unknown_creds(self):
         wrong_creds = {'id': 'not-a-valid-id',
                        'key': 'not really',
@@ -117,7 +127,7 @@ class TestAuthentication(AuthTest):
         req = self._request(sender)
 
         self.assertRaisesRegexp(AuthenticationFailed,
-                                'Hawk authentication failed',
+                                '^Hawk authentication failed$',
                                 lambda: self.auth.authenticate(req))
         self.assert_log_regex('warning',
                               '^access denied: CredentialsLookupError: ')
@@ -130,6 +140,15 @@ class TestAuthentication(AuthTest):
             assert isinstance(self.auth.authenticate(req)[0],
                               HawkAuthenticatedUser), (
                 'Expected a successful authentication returning a user')
+
+    def test_expired_token(self):
+        sender = self._sender(_timestamp="123")
+        req = self._request(sender)
+
+        self.assertRaisesRegexp(AuthenticationFailed,
+                                '^Hawk authentication failed: The token has expired. Is ',
+                                lambda: self.auth.authenticate(req))
+        self.assert_log_regex('warning', '^access denied: TokenExpired: ')
 
 
 class TestNonce(AuthTest):
@@ -159,7 +178,7 @@ class TestNonce(AuthTest):
     def test_nonce_exists(self):
         self.cache.get.return_value = True
         self.assertRaisesRegexp(AuthenticationFailed,
-                                'Hawk authentication failed',
+                                '^Hawk authentication failed$',
                                 self.auth_request)
         self.assert_log_regex('warning',
                               '^access denied: AlreadyProcessed: Nonce')
