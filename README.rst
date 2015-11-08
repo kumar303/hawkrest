@@ -3,4 +3,4 @@
 .. _`Hawk`: https://github.com/hueniverse/hawk
 .. _`Django Rest Framework`: http://django-rest-framework.org/
 
-Full documentation: http://hawkrest.readthedocs.org/en/latest/
+Full documentation: https://hawkrest.readthedocs.org/
