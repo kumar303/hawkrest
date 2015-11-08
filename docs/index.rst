@@ -9,8 +9,21 @@ HawkREST
 
 `Hawk`_ HTTP Authorization for `Django Rest Framework`_.
 
-.. image:: https://travis-ci.org/kumar303/hawkrest.png?branch=master
+.. image:: https://img.shields.io/pypi/v/hawkrest.svg
+    :target: https://pypi.python.org/pypi/hawkrest
+    :alt: Latest PyPI release
+
+.. image:: https://img.shields.io/pypi/dm/hawkrest.svg
+    :target: https://pypi.python.org/pypi/hawkrest
+    :alt: PyPI monthly download stats
+
+.. image:: https://travis-ci.org/kumar303/hawkrest.svg?branch=master
     :target: https://travis-ci.org/kumar303/hawkrest
+    :alt: Travis master branch status
+
+.. image:: http://readthedocs.org/projects/hawkrest/badge/?version=latest
+    :target: http://hawkrest.readthedocs.org/en/latest/?badge=latest
+    :alt: Documentation status
 
 Hawk lets two parties securely communicate with each other using
 messages signed by a shared key.
