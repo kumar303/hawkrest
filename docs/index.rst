@@ -90,6 +90,10 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
+- **0.0.9** (2016-01-07)
+
+  - Adds more specific ``AuthenticationFailed`` errors.
+
 - **0.0.8** (2015-10-01)
 
   - Fixes `issue #11 <https://github.com/kumar303/hawkrest/issues/11>`_
