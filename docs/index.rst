@@ -50,9 +50,11 @@ Installation
 
 Requirements:
 
-* Python 2.7+ or 3.3+
-* `Django Rest Framework`_
+* Python 2.7+ or 3.4+
+* `Django`_ 1.6, 1.7 or 1.8 (NB: hawkrest is not yet compatible with Django 1.9)
+* `Django Rest Framework`_ 3.2 or 3.3
 * `mohawk`_
+(Older versions of these libraries may work, but support is not guaranteed.)
 
 Using `pip`_, install the module like this::
 
@@ -63,6 +65,7 @@ You'll most likely put this in a `requirements`_ file within your Django app.
 
 The source code is available at https://github.com/kumar303/hawkrest
 
+.. _`Django`: https://www.djangoproject.com/
 .. _`Django Rest Framework`: http://django-rest-framework.org/
 .. _`mohawk`: http://mohawk.readthedocs.org/
 .. _`pip`: http://www.pip-installer.org/
