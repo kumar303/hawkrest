@@ -9,3 +9,6 @@ nosenicedots >= 0.5
 # For documentation.
 Sphinx >= 1.2.1
 sphinx-rtd-theme >= 0.1.5
+
+# For publishing to PyPI.
+twine >= 1.6.5
