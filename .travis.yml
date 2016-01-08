@@ -1,9 +1,8 @@
 sudo: false
 language: python
-python:
-    - "2.7"
-    - "3.4"
-python: 2.7
+# This only controls the version of Python used to run tox,
+# the versions used for the tests are handled by tox itself.
+python: "2.7"
 env:
     - TOX_ENV=docs
     - TOX_ENV=py27-django1.6-drf3.0
