@@ -10,9 +10,15 @@ env:
     - TOX_ENV=py27-django1.7-drf3.3
     - TOX_ENV=py27-django1.8-drf3.2
     - TOX_ENV=py27-django1.8-drf3.3
+    - TOX_ENV=py27-django1.9-drf3.3
     - TOX_ENV=py34-django1.8-drf3.2
     - TOX_ENV=py34-django1.8-drf3.3
+    - TOX_ENV=py34-django1.9-drf3.3
 matrix:
+    allow_failures:
+      # Remove when test failures under Django 1.9 are fixed.
+      - env: TOX_ENV=py27-django1.9-drf3.3
+      - env: TOX_ENV=py34-django1.9-drf3.3
     fast_finish: true
 install:
     - pip install tox
