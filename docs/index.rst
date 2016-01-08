@@ -52,7 +52,7 @@ Requirements:
 
 * Python 2.7+ or 3.4+
 * `Django`_ 1.6, 1.7 or 1.8
-* `Django Rest Framework`_ 3.2
+* `Django Rest Framework`_ 3.2 or 3.3
 * `mohawk`_
 (Older versions of these libraries may work, but support is not guaranteed.)
 
