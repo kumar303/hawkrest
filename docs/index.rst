@@ -50,7 +50,7 @@ Installation
 
 Requirements:
 
-* Python 2.7+ or 3.3+
+* Python 2.7+ or 3.4+
 * `Django Rest Framework`_ 3.2
 * `mohawk`_
 (Older versions of these libraries may work, but support is not guaranteed.)
