@@ -117,6 +117,9 @@ class HawkAuthenticatedUser(object):
     def get_username(self):
         return str(self.__class__.__name__)
 
+    def save(self, *args, **kwargs):
+        raise NotImplementedError()
+
     def natural_key(self):
         return str(self.__class__.__name__)
 
