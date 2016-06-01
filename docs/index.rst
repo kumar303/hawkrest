@@ -93,7 +93,7 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
-- **0.0.10** (unreleased)
+- **0.0.10** (2016-06-01)
 
   - Adds support for Django 1.9.
 
