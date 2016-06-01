@@ -93,6 +93,10 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
+- **0.0.10** (unreleased)
+
+  - Adds support for Django 1.9.
+
 - **0.0.9** (2016-01-07)
 
   - Adds more specific ``AuthenticationFailed`` errors.
