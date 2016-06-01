@@ -2,8 +2,15 @@ import re
 import unittest
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser
 from django.test.utils import override_settings
+
+try:
+    # Importing via base_user avoids the need for `django.contrib.auth`
+    # be added to `INSTALLED_APPS` in Django 1.9 and later.
+    from django.contrib.auth.base_user import AbstractBaseUser
+except ImportError:
+    # For compatibility with Django 1.8 and earlier.
+    from django.contrib.auth.models import AbstractBaseUser
 
 import mock
 from nose.tools import eq_
