@@ -19,7 +19,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 log = logging.getLogger(__name__)
-# Number of seconds until a Hawkmessage expires.
+# Number of seconds until a Hawk message expires.
 default_message_expiration = 60
 
 
@@ -117,6 +117,9 @@ class HawkAuthenticatedUser(object):
     def get_username(self):
         return str(self.__class__.__name__)
 
+    def save(self, *args, **kwargs):
+        raise NotImplementedError()
+
     def natural_key(self):
         return str(self.__class__.__name__)
 
@@ -142,7 +145,7 @@ class HawkAuthenticatedUser(object):
         raise NotImplementedError()
 
     # -----------------------------------------------
-    # These methods are in older Django vesions only:
+    # These methods are in older Django versions only:
     # -----------------------------------------------
 
     def get_previous_by_last_login(self, *args, **kw):
