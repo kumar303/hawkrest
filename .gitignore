@@ -9,4 +9,5 @@ docs/_build/*
 *.mo
 *.db
 *.egg-info
+build
 dist
