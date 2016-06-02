@@ -22,7 +22,7 @@ HawkREST
     :alt: Travis master branch status
 
 .. image:: http://readthedocs.org/projects/hawkrest/badge/?version=latest
-    :target: http://hawkrest.readthedocs.org/en/latest/?badge=latest
+    :target: https://hawkrest.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation status
 
 Hawk lets two parties securely communicate with each other using
@@ -41,7 +41,7 @@ with the security aspects of Hawk.
 .. _`Hawk`: https://github.com/hueniverse/hawk
 .. _`HTTP MAC access authentication`: http://tools.ietf.org/html/draft-hammer-oauth-v2-mac-token-05
 .. _`OAuth 1.0`: http://tools.ietf.org/html/rfc5849
-.. _`mohawk security considerations`: http://mohawk.readthedocs.org/en/latest/security.html
+.. _`mohawk security considerations`: https://mohawk.readthedocs.io/en/latest/security.html
 
 .. _install:
 
@@ -67,7 +67,7 @@ The source code is available at https://github.com/kumar303/hawkrest
 
 .. _`Django`: https://www.djangoproject.com/
 .. _`Django Rest Framework`: http://django-rest-framework.org/
-.. _`mohawk`: http://mohawk.readthedocs.org/
+.. _`mohawk`: https://mohawk.readthedocs.io/
 .. _`pip`: http://www.pip-installer.org/
 .. _`requirements`: http://www.pip-installer.org/en/latest/user_guide.html#requirements-files
 
@@ -136,7 +136,7 @@ Changelog
 - **0.0.4** (2015-06-24)
 
   - Fixed nonce callback support for
-    `mohawk 0.3.0 <http://mohawk.readthedocs.org/en/latest/#changelog>`_.
+    `mohawk 0.3.0 <https://mohawk.readthedocs.io/en/latest/#changelog>`_.
     Thanks to Josh Wilson for the patches.
 
 - **0.0.3** (2015-01-05)
