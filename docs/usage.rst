@@ -101,7 +101,7 @@ for some reason, set this:
     USE_CACHE_FOR_HAWK_NONCE = False  # only disable this if you need to
 
 .. _`memcache`: https://docs.djangoproject.com/en/dev/topics/cache/#memcached
-.. _`prevent replay attacks`: http://mohawk.readthedocs.org/en/latest/usage.html#using-a-nonce-to-prevent-replay-attacks
+.. _`prevent replay attacks`: https://mohawk.readthedocs.io/en/latest/usage.html#using-a-nonce-to-prevent-replay-attacks
 
 
 .. _protecting-api-views:

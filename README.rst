@@ -13,7 +13,7 @@ HawkREST
     :alt: Travis master branch status
 
 .. image:: https://readthedocs.org/projects/hawkrest/badge/?version=latest
-    :target: https://hawkrest.readthedocs.org/en/latest/?badge=latest
+    :target: https://hawkrest.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation status
 
 
@@ -22,4 +22,4 @@ HawkREST
 .. _`Hawk`: https://github.com/hueniverse/hawk
 .. _`Django Rest Framework`: http://django-rest-framework.org/
 
-Full documentation: https://hawkrest.readthedocs.org/
+Full documentation: https://hawkrest.readthedocs.io/
