@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import HttpResponse
 
 import mock
-from mohawk.exc import MacMismatch
+from mohawk.exc import MisComputedContentHash
 from mohawk import Receiver
 
 from hawkrest import lookup_credentials
@@ -57,7 +57,7 @@ class TestMiddleware(BaseTest):
 
         response.content = 'TAMPERED WITH'
 
-        with self.assertRaises(MacMismatch):
+        with self.assertRaises(MisComputedContentHash):
             self.accept_response(res, sender)
 
     def test_respond_with_bad_content_type(self):
@@ -68,5 +68,5 @@ class TestMiddleware(BaseTest):
 
         response['Content-Type'] = 'TAMPERED WITH'
 
-        with self.assertRaises(MacMismatch):
+        with self.assertRaises(MisComputedContentHash):
             self.accept_response(res, sender)

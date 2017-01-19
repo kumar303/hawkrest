@@ -106,7 +106,7 @@ class TestAuthentication(AuthTest):
         self.assertRaisesRegexp(AuthenticationFailed,
                                 '^Hawk authentication failed$',
                                 lambda: self.auth.authenticate(req))
-        self.assert_log_regex('warning', '^access denied: MacMismatch: ')
+        self.assert_log_regex('warning', '^access denied: MisComputedContentHash: ')
 
     def test_hawk_get_wrong_sig(self):
         sender = self._sender(url='http://realsite.com')

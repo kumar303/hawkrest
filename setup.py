@@ -22,4 +22,4 @@ setup(name='hawkrest',
           'Topic :: Internet :: WWW/HTTP',
       ],
       packages=find_packages(exclude=['tests']),
-      install_requires=['djangorestframework', 'mohawk>=0.3.0'])
+      install_requires=['djangorestframework', 'mohawk>=0.3.3'])
