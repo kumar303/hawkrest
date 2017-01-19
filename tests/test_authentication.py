@@ -45,7 +45,7 @@ class AuthTest(BaseTest):
     def assert_log_regex(self, method, pattern):
         log_call = getattr(self.mock_log, method).call_args[0][0]
         assert re.search(pattern, log_call), (
-            'Unexpected call: log.{}("{}")'.format(method, log_call))
+            'Expected log.{}() matching "{}", saw: "{}"'.format(method, pattern, log_call))
 
 
 class TestAuthentication(AuthTest):
