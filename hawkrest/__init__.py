@@ -117,6 +117,10 @@ class HawkAuthenticatedUser(object):
     def get_username(self):
         return str(self.__class__.__name__)
 
+    def clean(self):
+        # There's nothing to clean, since the name is `self.__class__.__name__`.
+        pass
+
     def save(self, *args, **kwargs):
         raise NotImplementedError()
 

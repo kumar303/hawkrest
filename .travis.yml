@@ -44,18 +44,6 @@ matrix:
     - python: 3.6
       env: TOX_ENV=py36-djangomaster-drf3.5
   allow_failures:
-    # Tests currently fail under Django 1.10+ (see #30).
-    - env: TOX_ENV=py27-django1.10-drf3.4
-    - env: TOX_ENV=py27-django1.10-drf3.5
-    - env: TOX_ENV=py27-django1.11-drf3.5
-    - env: TOX_ENV=py34-django1.10-drf3.4
-    - env: TOX_ENV=py34-django1.10-drf3.5
-    - env: TOX_ENV=py34-django1.11-drf3.5
-    - env: TOX_ENV=py35-django1.10-drf3.4
-    - env: TOX_ENV=py35-django1.10-drf3.5
-    - env: TOX_ENV=py35-django1.11-drf3.5
-    - python: 3.6
-      env: TOX_ENV=py36-django1.11-drf3.5
     # Django master is allowed to fail.
     - env: TOX_ENV=py35-djangomaster-drf3.5
     - python: 3.6
