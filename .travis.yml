@@ -35,6 +35,7 @@ env:
     - TOX_ENV=py35-django1.10-drf3.4
     - TOX_ENV=py35-django1.10-drf3.5
     - TOX_ENV=py35-django1.11-drf3.5
+    - TOX_ENV=py35-djangomaster-drf3.5
 matrix:
   allow_failures:
     # Tests currently fail under Django 1.10+ (see #30).
@@ -47,6 +48,8 @@ matrix:
     - env: TOX_ENV=py35-django1.10-drf3.4
     - env: TOX_ENV=py35-django1.10-drf3.5
     - env: TOX_ENV=py35-django1.11-drf3.5
+    # Django master is allowed to fail.
+    - env: TOX_ENV=py35-djangomaster-drf3.5
   fast_finish: true
 install:
     - pip install tox
