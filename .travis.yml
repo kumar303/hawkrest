@@ -16,16 +16,32 @@ env:
     - TOX_ENV=py27-django1.8-drf3.5
     - TOX_ENV=py27-django1.9-drf3.4
     - TOX_ENV=py27-django1.9-drf3.5
+    - TOX_ENV=py27-django1.10-drf3.4
+    - TOX_ENV=py27-django1.10-drf3.5
 
     - TOX_ENV=py34-django1.8-drf3.4
     - TOX_ENV=py34-django1.8-drf3.5
     - TOX_ENV=py34-django1.9-drf3.4
     - TOX_ENV=py34-django1.9-drf3.5
+    - TOX_ENV=py34-django1.10-drf3.4
+    - TOX_ENV=py34-django1.10-drf3.5
 
     - TOX_ENV=py35-django1.8-drf3.4
     - TOX_ENV=py35-django1.8-drf3.5
     - TOX_ENV=py35-django1.9-drf3.4
     - TOX_ENV=py35-django1.9-drf3.5
+    - TOX_ENV=py35-django1.10-drf3.4
+    - TOX_ENV=py35-django1.10-drf3.5
+matrix:
+  allow_failures:
+    # Tests currently fail under Django 1.10+ (see #30).
+    - env: TOX_ENV=py27-django1.10-drf3.4
+    - env: TOX_ENV=py27-django1.10-drf3.5
+    - env: TOX_ENV=py34-django1.10-drf3.4
+    - env: TOX_ENV=py34-django1.10-drf3.5
+    - env: TOX_ENV=py35-django1.10-drf3.4
+    - env: TOX_ENV=py35-django1.10-drf3.5
+  fast_finish: true
 install:
     - pip install tox
 script:
