@@ -8,19 +8,24 @@ language: python
 # https://github.com/travis-ci/travis-ci/issues/4794#issuecomment-143758799
 python: "3.5"
 env:
+    # Keep in sync with tox.ini.
+
     - TOX_ENV=docs
 
-    - TOX_ENV=py27-django1.8-drf3.2
-    - TOX_ENV=py27-django1.8-drf3.3
-    - TOX_ENV=py27-django1.9-drf3.3
+    - TOX_ENV=py27-django1.8-drf3.4
+    - TOX_ENV=py27-django1.8-drf3.5
+    - TOX_ENV=py27-django1.9-drf3.4
+    - TOX_ENV=py27-django1.9-drf3.5
 
-    - TOX_ENV=py34-django1.8-drf3.2
-    - TOX_ENV=py34-django1.8-drf3.3
-    - TOX_ENV=py34-django1.9-drf3.3
+    - TOX_ENV=py34-django1.8-drf3.4
+    - TOX_ENV=py34-django1.8-drf3.5
+    - TOX_ENV=py34-django1.9-drf3.4
+    - TOX_ENV=py34-django1.9-drf3.5
 
-    - TOX_ENV=py35-django1.8-drf3.2
-    - TOX_ENV=py35-django1.8-drf3.3
-    - TOX_ENV=py35-django1.9-drf3.3
+    - TOX_ENV=py35-django1.8-drf3.4
+    - TOX_ENV=py35-django1.8-drf3.5
+    - TOX_ENV=py35-django1.9-drf3.4
+    - TOX_ENV=py35-django1.9-drf3.5
 install:
     - pip install tox
 script:
