@@ -45,7 +45,7 @@ class AuthTest(BaseTest):
     def assert_log_regex(self, method, pattern):
         log_call = getattr(self.mock_log, method).call_args[0][0]
         assert re.search(pattern, log_call), (
-            'Unexpected call: log.{}("{}")'.format(method, log_call))
+            'Expected log.{}() matching "{}", saw: "{}"'.format(method, pattern, log_call))
 
 
 class TestAuthentication(AuthTest):
@@ -106,7 +106,7 @@ class TestAuthentication(AuthTest):
         self.assertRaisesRegexp(AuthenticationFailed,
                                 '^Hawk authentication failed$',
                                 lambda: self.auth.authenticate(req))
-        self.assert_log_regex('warning', '^access denied: MacMismatch: ')
+        self.assert_log_regex('warning', '^access denied: MisComputedContentHash: ')
 
     def test_hawk_get_wrong_sig(self):
         sender = self._sender(url='http://realsite.com')
