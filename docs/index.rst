@@ -51,7 +51,7 @@ Installation
 Requirements:
 
 * Python 2.7+ or 3.4+
-* `Django`_ 1.6 through 1.9
+* `Django`_ 1.8 through 1.9
 * `Django Rest Framework`_ 3.2 or 3.3
 * `mohawk`_
 (Older versions of these libraries may work, but support is not guaranteed.)
@@ -92,6 +92,10 @@ Changelog
     If you're upgrading from a version prior to 0.0.6, be sure to
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
+
+- **Unreleased**
+
+  - Dropped support for Django 1.6/1.7.
 
 - **0.0.10** (2016-06-01)
 
