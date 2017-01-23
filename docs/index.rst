@@ -51,7 +51,7 @@ Installation
 Requirements:
 
 * Python 2.7+ or 3.4+
-* `Django`_ 1.8 through 1.9
+* `Django`_ 1.8 through 1.11
 * `Django Rest Framework`_ 3.4 or 3.5
 * `mohawk`_
 (Older versions of these libraries may work, but support is not guaranteed.)
@@ -98,6 +98,7 @@ Changelog
   - Dropped support for Django 1.6/1.7.
   - Dropped support for django-rest-framework 3.2/3.3.
   - Confirmed support for django-rest-framework 3.4/3.5.
+  - Added support for Django 1.10/1.11.
 
 - **0.0.10** (2016-06-01)
 
