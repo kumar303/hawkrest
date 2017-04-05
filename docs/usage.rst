@@ -64,11 +64,11 @@ If you need an alternative method for looking up credentials you can set up a
 lookup function under the ``HAWK_CREDENTIALS_LOOKUP`` setting. This function
 receives a Hawk ID as a parameter and returns a dict containing the
 credentials. For example, if you have a ``HawkUser`` model with a ``key``
-attribute then you can write a function ``hawk_lookup`` as follows:
+attribute then you can write a function ``hawk_credentials_lookup`` as follows:
 
 .. code-block:: python
 
-    def hawk_lookup(id):
+    def hawk_credentials_lookup(id):
         user = HawkUser.objects.get(some_id=id)
         return {
             'id': id,
@@ -80,7 +80,65 @@ and then you would configure it in your settings:
 
 .. code-block:: python
 
-    HAWK_CREDENTIALS_LOOKUP = 'yourapi.auth.hawk_lookup'
+    HAWK_CREDENTIALS_LOOKUP = 'yourapi.auth.hawk_credentials_lookup'
+
+Alternately, you can subclass ``HawkAuthentication`` and override the ``hawk_credentials_lookup()`` method. For example:
+
+.. code-block:: python
+
+    class YourHawk(HawkAuthentication):
+        def hawk_credentials_lookup(self, id):
+            user = HawkUser.objects.get(some_id=id)
+            return {
+                'id': id,
+                'key': user.key,
+                'algorithm': 'sha256'
+            }
+
+and then specify your new class instead in the authentication backend list:
+
+.. code-block:: python
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'yourapi.auth.YourHawk',
+        ),
+        ...
+    }
+
+By default, a generic ``HawkAuthenticatedUser`` instance is returned when valid Hawk credentials are found. If you need another user model, you can set up a lookup function under the ``HAWK_USER_LOOKUP`` setting. This function receives the request and the matched credentials dict as parameters and returns a ``(user, auth)`` tuple as per `custom authentication`_. For example, with a ``HawkUser`` model whose ``user_id`` is included in the credentials dict, you can write a function ``hawk_user_lookup`` as follows:
+
+.. code-block:: python
+
+    def hawk_user_lookup(request, credentials):
+        return HawkUser.objects.get(some_id=credentials['id'])
+
+and then you would configure it in your settings:
+
+.. code-block:: python
+
+    HAWK_USER_LOOKUP = 'yourapi.auth.hawk_user_lookup'
+
+.. _`custom authentication`: http://www.django-rest-framework.org/api-guide/authentication/#custom-authentication
+
+Alternately, you can subclass ``HawkAuthentication`` and override the ``hawk_user_lookup()`` method. For example:
+
+.. code-block:: python
+
+    class YourHawk(HawkAuthentication):
+        def hawk_user_lookup(self, request, credentials):
+            return HawkUser.objects.get(some_id=credentials['id'])
+
+and then specify your new class instead in the authentication backend list:
+
+.. code-block:: python
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'yourapi.auth.YourHawk',
+        ),
+        ...
+    }
 
 
 This setting is the number of seconds until a Hawk message

@@ -23,32 +23,49 @@ log = logging.getLogger(__name__)
 default_message_expiration = 60
 
 
+def default_credentials_lookup(cr_id):
+    if cr_id not in settings.HAWK_CREDENTIALS:
+        raise LookupError('No Hawk ID of {id}'.format(id=cr_id))
+    return settings.HAWK_CREDENTIALS[cr_id]
+
+
+def default_user_lookup(request, credentials):
+    return HawkAuthenticatedUser(), None
+
+
 class HawkAuthentication(BaseAuthentication):
 
-    def authenticate(self, request):
-        on_success = (HawkAuthenticatedUser(), None)
+    def hawk_credentials_lookup(self, cr_id):
+        lookup = default_credentials_lookup
+        lookup_name = getattr(
+            settings,
+            'HAWK_CREDENTIALS_LOOKUP',
+            None)
+        if lookup_name:
+            log.debug('Using custom credentials lookup from: {}'
+                .format(lookup_name))
+            lookup = import_string(lookup_name)
+        return lookup(cr_id)
 
+    def hawk_user_lookup(self, request, credentials):
+        lookup = default_user_lookup
+        lookup_name = getattr(
+            settings,
+            'HAWK_USER_LOOKUP',
+            None)
+        if lookup_name:
+            log.debug('Using custom user lookup from: {}'
+                .format(lookup_name))
+            lookup = import_string(lookup_name)
+        return lookup(request, credentials)
+
+    def authenticate(self, request):
         # In case there is an exception, tell others that the view passed
         # through Hawk authorization. The META dict is used because
         # middleware may not get an identical request object.
         # A dot-separated key is to work around potential environ var
         # pollution of META.
         request.META['hawk.receiver'] = None
-
-        if getattr(settings, 'SKIP_HAWK_AUTH', False):
-            # This was added as a convenient way to run the apk-signer
-            # test suite but it's probably the wrong way to do it.
-            log.warn('Hawk authentication disabled via settings')
-            return on_success
-
-        lookup_function = lookup_credentials
-        settings_lookup_name = getattr(
-            settings,
-            'HAWK_CREDENTIALS_LOOKUP',
-            None
-        )
-        if settings_lookup_name:
-            lookup_function = import_string(settings_lookup_name)
 
         http_authorization = request.META.get('HTTP_AUTHORIZATION')
         if not http_authorization:
@@ -61,7 +78,7 @@ class HawkAuthentication(BaseAuthentication):
 
         try:
             receiver = Receiver(
-                lookup_function,
+                lambda cr_id: self.hawk_credentials_lookup(cr_id),
                 http_authorization,
                 request.build_absolute_uri(),
                 request.method,
@@ -92,10 +109,16 @@ class HawkAuthentication(BaseAuthentication):
         # Pass our receiver object to the middleware so the request header
         # doesn't need to be parsed again.
         request.META['hawk.receiver'] = receiver
-        return on_success
+        return self.hawk_user_lookup(request, receiver.resource.credentials)
 
     def authenticate_header(self, request):
         return 'Hawk'
+
+    # Added for Django compatibility, allowing use of this class as a
+    # normal Django authentication backend as well (for views outside
+    # Django Rest Framework)
+    def get_user(self, user_id):
+        return HawkAuthenticatedUser()
 
 
 class HawkAuthenticatedUser(object):
@@ -157,12 +180,6 @@ class HawkAuthenticatedUser(object):
 
     def get_next_by_last_login(self, *args, **kw):
         raise NotImplementedError()
-
-
-def lookup_credentials(cr_id):
-    if cr_id not in settings.HAWK_CREDENTIALS:
-        raise LookupError('No Hawk ID of {id}'.format(id=cr_id))
-    return settings.HAWK_CREDENTIALS[cr_id]
 
 
 def seen_nonce(id, nonce, timestamp):

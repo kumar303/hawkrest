@@ -5,7 +5,7 @@ import mock
 from mohawk.exc import MisComputedContentHash
 from mohawk import Receiver
 
-from hawkrest import lookup_credentials
+from hawkrest import default_credentials_lookup
 from hawkrest.middleware import HawkResponseMiddleware
 
 from .base import BaseTest
@@ -30,7 +30,7 @@ class TestMiddleware(BaseTest):
         if not url:
             url = self.url
         # Simulate how a view authorizes a request.
-        receiver = Receiver(lookup_credentials,
+        receiver = Receiver(default_credentials_lookup,
                             sender.request_header,
                             url, method,
                             content=req.body,

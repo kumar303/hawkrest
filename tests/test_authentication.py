@@ -2,7 +2,6 @@ import re
 import unittest
 
 from django.conf import settings
-from django.test.utils import override_settings
 
 try:
     # Importing via base_user avoids the need for `django.contrib.auth`
@@ -27,10 +26,24 @@ ALTERNATIVE_CREDS = {
     'algorithm' : 'sha256'
 }
 
-
-def alternative_lookup(cr_id):
+def alternative_cred_lookup(cr_id):
     return ALTERNATIVE_CREDS
 
+class AlternateAuthentication(HawkAuthentication):
+    def hawk_credentials_lookup(self, cr_id):
+        return ALTERNATIVE_CREDS
+
+
+class AlternateAuthenticatedUser(HawkAuthenticatedUser):
+    pass
+
+def alternative_user_lookup(request, credentials):
+    return AlternateAuthenticatedUser(), None
+
+class AlternateUserAuthentication(HawkAuthentication):
+    def hawk_user_lookup(self, request, credentials):
+        return AlternateAuthenticatedUser(), None
+        
 
 class AuthTest(BaseTest):
 
@@ -139,14 +152,39 @@ class TestAuthentication(AuthTest):
         self.assert_log_regex('warning',
                               '^access denied: CredentialsLookupError: ')
 
-    def test_alternative_credential_lookup(self):
+    def test_alternative_creds_lookup_setting(self):
         sender = self._sender(credentials=ALTERNATIVE_CREDS)
         req = self._request(sender)
-        lookup_path = "%s.alternative_lookup" % __name__
+        lookup_path = "%s.alternative_cred_lookup" % __name__
         with self.settings(HAWK_CREDENTIALS_LOOKUP=lookup_path):
             assert isinstance(self.auth.authenticate(req)[0],
                               HawkAuthenticatedUser), (
                 'Expected a successful authentication returning a user')
+
+    def test_alternative_creds_lookup_sublcass(self):
+        auth = AlternateAuthentication()
+        sender = self._sender(credentials=ALTERNATIVE_CREDS)
+        req = self._request(sender)
+        assert isinstance(auth.authenticate(req)[0],
+                          HawkAuthenticatedUser), (
+            'Expected a successful authentication returning a user')
+
+    def test_alternative_user_lookup_setting(self):
+        sender = self._sender()
+        req = self._request(sender)
+        lookup_path = "%s.alternative_user_lookup" % __name__
+        with self.settings(HAWK_USER_LOOKUP=lookup_path):
+            assert isinstance(self.auth.authenticate(req)[0],
+                              AlternateAuthenticatedUser), (
+                'Expected a successful authentication returning a user')
+
+    def test_alternative_user_lookup_sublcass(self):
+        auth = AlternateUserAuthentication()
+        sender = self._sender()
+        req = self._request(sender)
+        assert isinstance(auth.authenticate(req)[0],
+                          AlternateAuthenticatedUser), (
+            'Expected a successful authentication returning a user')
 
     def test_expired_token(self):
         sender = self._sender(_timestamp="123")
@@ -156,6 +194,11 @@ class TestAuthentication(AuthTest):
                                 '^Hawk authentication failed: The token has expired. Is ',
                                 lambda: self.auth.authenticate(req))
         self.assert_log_regex('warning', '^access denied: TokenExpired: ')
+
+    def test_get_user(self):
+        assert isinstance(self.auth.get_user(None),
+                          HawkAuthenticatedUser), (
+            'Expected returning a user')
 
 
 class TestNonce(AuthTest):

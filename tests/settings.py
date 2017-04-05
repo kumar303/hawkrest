@@ -2,10 +2,6 @@
 # HawkREST settings
 #
 
-# When True, it means Hawk authentication will be disabled everywhere.
-# This is mainly just to get a speed-up in an app while testing.
-SKIP_HAWK_AUTH = False
-
 HAWK_CREDENTIALS = {
     'script-user': {
         'id': 'script-user',
