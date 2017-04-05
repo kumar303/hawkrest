@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='hawkrest',
-      version='0.0.10',
+      version='1.0.0',
       description="Hawk HTTP Authorization for Django Rest Framework",
       long_description='',
       author='Kumar McMillan',
@@ -28,4 +28,4 @@ setup(name='hawkrest',
           'Topic :: Internet :: WWW/HTTP',
       ],
       packages=find_packages(exclude=['tests']),
-      install_requires=['djangorestframework', 'mohawk>=0.3.3'])
+      install_requires=['djangorestframework', 'mohawk>=0.3.4'])

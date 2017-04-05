@@ -4,6 +4,7 @@
 .DS_Store
 .noseids
 .tox
+.venv
 docs/_build/*
 *~
 *.mo

@@ -86,6 +86,8 @@ Alternately, you can subclass ``HawkAuthentication`` and override the ``hawk_cre
 
 .. code-block:: python
 
+    from hawkrest import HawkAuthentication
+
     class YourHawk(HawkAuthentication):
         def hawk_credentials_lookup(self, id):
             user = HawkUser.objects.get(some_id=id)
@@ -125,6 +127,8 @@ Alternately, you can subclass ``HawkAuthentication`` and override the ``hawk_use
 
 .. code-block:: python
 
+    from hawkrest import HawkAuthentication
+
     class YourHawk(HawkAuthentication):
         def hawk_user_lookup(self, request, credentials):
             return HawkUser.objects.get(some_id=credentials['id'])
@@ -149,10 +153,10 @@ expires:
     HAWK_MESSAGE_EXPIRATION = 60
 
 To `prevent replay attacks`_, Hawkrest uses the Django cache framework
-for nonce lookups. You should configure Django with something robust
-like `memcache`_. By default, Django uses in-memory caching so by
-default nonce checking will be activated. If you need to *disable* it
-for some reason, set this:
+for nonce lookups. You should configure Django with something
+like `memcache`_ in production. By default, Django uses in-memory
+caching and by default nonce checking will be activated. If you need to
+*disable* it for some reason, set this:
 
 .. code-block:: python
 
