@@ -17,6 +17,8 @@ from mohawk.exc import BadHeaderValue, HawkFail, TokenExpired
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
+from hawkrest.util import get_auth_header, is_hawk_request
+
 
 log = logging.getLogger(__name__)
 # Number of seconds until a Hawk message expires.
@@ -67,11 +69,11 @@ class HawkAuthentication(BaseAuthentication):
         # pollution of META.
         request.META['hawk.receiver'] = None
 
-        http_authorization = request.META.get('HTTP_AUTHORIZATION')
+        http_authorization = get_auth_header(request)
         if not http_authorization:
             log.debug('no authorization header in request')
             return None
-        elif not http_authorization.startswith('Hawk '):
+        elif not is_hawk_request(request):
             log.debug('ignoring non-Hawk authorization header: {} '
                       .format(http_authorization))
             return None
