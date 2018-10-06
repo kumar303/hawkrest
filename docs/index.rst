@@ -94,6 +94,12 @@ Changelog
     use ``rest_framework.permissions.IsAuthenticated`` on your views
     :ref:`as documented <protecting-api-views>`
 
+- **1.0.1 (2018-10-06)**
+  - Added support for being used via Django 1.11's new `MIDDLEWARE` option.
+  - Fixed the ``hawkrequest`` management command when using newer Django/Python.
+  - Fixed inconsistency between the way the middleware and authentication
+    backend determined whether a request was a Hawk signed request.
+
 - **1.0.0 (2017-04-05)**
 
   - Added support for a ``HAWK_USER_LOOKUP`` setting.
